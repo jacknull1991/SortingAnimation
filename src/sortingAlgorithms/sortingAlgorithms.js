@@ -1,6 +1,7 @@
+//============= Merge Sort ========================
 export const mergeSort = array => {
     const animations = [];
-    if (array.length <= 1) return array;
+    if (array.length <= 1) return animations;
     const copy = array.slice();
     mergeSortHelper(array, 0, array.length - 1, copy, animations);
     return animations;
@@ -54,24 +55,26 @@ function doMerge(array, lo, mid, hi, copy, animations) {
 }
 
 
+//============= Quick Sort ========================
 export const quickSort = array => {
     const animations = [];
-    if (array.length <= 1) return array;
+    if (array.length <= 1) return animations;
     quickSortHelper(array, 0, array.length - 1, animations);
     // return array;
     return animations;
 }
 
+// not optimized for random pivoting
 function quickSortHelper(array, lo, hi, animations) {
     if (lo >= hi) return;
     // partition
-    const pivot = partition(array, lo, hi, animations);
+    const pivot = quickSortPartition(array, lo, hi, animations);
     // sort recursively
     quickSortHelper(array, lo, pivot - 1, animations);
     quickSortHelper(array, pivot + 1, hi, animations);
 }
 
-function partition(array, lo, hi, animations) {
+function quickSortPartition(array, lo, hi, animations) {
     const animation = [];
     let pivot = array[hi];
     let i = lo;
@@ -93,6 +96,37 @@ function partition(array, lo, hi, animations) {
     return i;
 }
 
+//============= Bubble Sort =======================
+export const bubbleSort = array => {
+    const animations = [];
+    if (array.length <= 1) return array;
+    bubbleSortHelper(array, animations);
+    return animations;
+}
+
+// naive implementation
+function bubbleSortHelper(array, animations) {
+    let len = array.length;
+    let swapped;
+    do {
+        swapped = false;
+        for (let i = 1; i < len; i++) {
+            animations.push([i - 1, i, array[i-1], array[i]]);
+            if (array[i - 1] > array[i]) {
+                animations.push([i - 1, i, array[i-1], array[i]]);
+                arraySwap(array, i - 1, i);
+                swapped = true;
+            } else {
+                // do-nothing animation
+                animations.push([i - 1, i, -1, -1]);
+            }
+        }
+        len = len - 1;
+    } while (swapped)
+}
+
+
+//==============Common Helper Functions============
 function arraySwap(array, idx1, idx2) {
     const tmp = array[idx1];
     array[idx1] = array[idx2];
