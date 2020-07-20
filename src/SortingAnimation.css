@@ -1,0 +1,26 @@
+.array-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 90vh;
+    min-height: 600px;
+}
+
+.array-bar {
+    width: 5px;
+    background-color: pink;
+    display: inline-block;
+    margin: 1px;
+}
+
+.control-container {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    font-family: consolas;
+    height: 10vh;
+    width: 100vw;
+    min-height: 50px;
+    background: #091921;
+}
