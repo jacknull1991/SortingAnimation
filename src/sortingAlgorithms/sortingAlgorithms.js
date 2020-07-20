@@ -96,10 +96,77 @@ function quickSortPartition(array, lo, hi, animations) {
     return i;
 }
 
+//============= Heap Sort =========================
+export const heapSort = array => {
+    const animations = [];
+    if (array.length <= 1) return animations;
+    heapSortHelper(array, animations);
+    return animations;
+}
+
+function heapSortHelper(array, animations) {
+    let len = array.length;
+
+    // Build heap (rearrange array)
+    heapify(array, animations);
+
+    let end = len - 1;
+    while (end > 0) {
+        // first for visualizing comparison 
+        animations.push([end, 0, array[end], array[0]]);
+        // second for visualizing swapping
+        animations.push([end, 0, array[end], array[0]]);
+        arraySwap(array, end, 0);
+        end--;
+        swapDown(array, 0, end, animations);
+    }
+}
+
+// parent(i) = (i-1)/2
+// leftChild(i) = i*2 + 1
+// rightChild(i) = i*2 + 2
+function heapify(array, animations) {
+    let len = array.length;
+    let start = len / 2 - 1;
+
+    while (start >= 0) {
+        // swap down the node at start s.t. all nodes below the start index are in heap order
+        swapDown(array, start, len - 1, animations);
+        start--;
+    }
+}
+
+function swapDown(array, start, end, animations) {
+    let root = start;
+
+    // while the root has atleast 1 child
+    while (root * 2 + 1 <= end) {
+        let child = root * 2 + 1;
+        let swap = root; // keep track of which node to swap with
+
+        if (array[swap] < array[child]) {
+            swap = child;
+        }
+        // if there is a right child and it is greater than whatever is to be swapped
+        if (child + 1 <= end && array[swap] < array[child + 1]) {
+            swap = child + 1;
+        }
+        if (swap === root) {
+            return; // no swap needed
+        } else {
+            animations.push([root, swap, array[root], array[swap]]);
+            animations.push([root, swap, array[root], array[swap]]);
+            arraySwap(array, root, swap, animations);
+            root = swap;
+        }
+    }
+}
+
+
 //============= Bubble Sort =======================
 export const bubbleSort = array => {
     const animations = [];
-    if (array.length <= 1) return array;
+    if (array.length <= 1) return animations;
     bubbleSortHelper(array, animations);
     return animations;
 }

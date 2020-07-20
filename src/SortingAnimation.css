@@ -18,7 +18,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: consolas;
+    font-family: 100% Verdana, Arial, Helvetica, sans-serif;
     height: 10vh;
     width: 100vw;
     min-height: 50px;
@@ -37,7 +37,7 @@
 
 .control-container button {
     height: 36px;
-    border-radius: 2px;
+    border-radius: 5px;
     background: #282c34;
     border: 2px solid turquoise;
     margin-left: 10px;
