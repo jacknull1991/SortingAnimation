@@ -52,3 +52,49 @@ function doMerge(array, lo, mid, hi, copy, animations) {
     }
 
 }
+
+
+export const quickSort = array => {
+    const animations = [];
+    if (array.length <= 1) return array;
+    quickSortHelper(array, 0, array.length - 1, animations);
+    // return array;
+    return animations;
+}
+
+function quickSortHelper(array, lo, hi, animations) {
+    if (lo >= hi) return;
+    // partition
+    const pivot = partition(array, lo, hi, animations);
+    // sort recursively
+    quickSortHelper(array, lo, pivot - 1, animations);
+    quickSortHelper(array, pivot + 1, hi, animations);
+}
+
+function partition(array, lo, hi, animations) {
+    const animation = [];
+    let pivot = array[hi];
+    let i = lo;
+    // mark pivot for this iteration
+    animation.push([hi, hi, array[hi], array[hi]]);
+
+    for (let j = lo; j < hi; j++) {
+        if (array[j] < pivot) {
+            animation.push([i, j, array[i], array[j]]);
+            animation.push([i, j, array[i], array[j]]);
+            arraySwap(array, i, j);
+            i++;
+        }
+    }
+    // swap pivot to correct position
+    animation.push([i, hi, array[i], array[hi]]);
+    arraySwap(array, i, hi);
+    animations.push(animation);
+    return i;
+}
+
+function arraySwap(array, idx1, idx2) {
+    const tmp = array[idx1];
+    array[idx1] = array[idx2];
+    array[idx2] = tmp;
+}

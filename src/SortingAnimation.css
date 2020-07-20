@@ -14,13 +14,40 @@
 }
 
 .control-container {
-    position: fixed;
-    bottom: 0;
+    position: relative;
     display: flex;
     justify-content: center;
+    align-items: center;
     font-family: consolas;
     height: 10vh;
     width: 100vw;
     min-height: 50px;
-    background: #091921;
+    background: #282c34;
+}
+
+.control-container p {
+    position: absolute;
+    left: 20px;
+    top: -25px;
+    font-size: 36px;
+    font-weight: 800;
+    
+    color: white;
+}
+
+.control-container button {
+    height: 36px;
+    border-radius: 2px;
+    background: #282c34;
+    border: 2px solid turquoise;
+    margin-left: 10px;
+    font-size: 1em;
+    font-weight: 800;
+    color: white;
+    outline: none;
+    cursor: pointer;
+}
+
+.control-container button:hover {
+    background: turquoise;
 }
