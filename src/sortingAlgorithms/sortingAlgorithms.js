@@ -82,11 +82,13 @@ function quickSortPartition(array, lo, hi, animations) {
     animation.push([hi, hi, array[hi], array[hi]]);
 
     for (let j = lo; j < hi; j++) {
+        animation.push([i, j, array[i], array[j]]);
         if (array[j] < pivot) {
-            animation.push([i, j, array[i], array[j]]);
             animation.push([i, j, array[i], array[j]]);
             arraySwap(array, i, j);
             i++;
+        } else {
+            animation.push([i, j, -1, -1]);
         }
     }
     // swap pivot to correct position
@@ -192,6 +194,30 @@ function bubbleSortHelper(array, animations) {
     } while (swapped)
 }
 
+//============ selection Sort =====================
+export const selectionSort = array => {
+    const animations = [];
+    if (array.length <= 1) return animations;
+    selectionSortHelper(array, 0, animations);
+    return animations;
+}
+
+function selectionSortHelper(array, start, animations) {
+    if (start >= array.length - 1) return;
+
+    let min_idx = start;
+    for (let i = start + 1; i < array.length; i++) {
+        animations.push([min_idx, i, -1, -1]);
+        animations.push([min_idx, i, -1, -1]);
+        if (array[i] < array[min_idx]) {
+            min_idx = i;
+        }
+    }
+    animations.push([min_idx, start, -1, -1]);
+    animations.push([min_idx, start, array[min_idx], array[start]]);
+    arraySwap(array, start, min_idx);
+    selectionSortHelper(array, start + 1, animations);
+}
 
 //==============Common Helper Functions============
 function arraySwap(array, idx1, idx2) {

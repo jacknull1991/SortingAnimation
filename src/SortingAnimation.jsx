@@ -3,7 +3,7 @@ import * as sortingAlgorithms from './sortingAlgorithms/sortingAlgorithms'
 import './SortingAnimation.css';
 
 // animation speed in ms
-const ANIMATION_SPEED = 10;
+const ANIMATION_SPEED = 5;
 
 export default class SortingAnimation extends React.Component {
     constructor(props) {
@@ -22,7 +22,7 @@ export default class SortingAnimation extends React.Component {
     // randomly generate new array
     resetArray() {
         const array = [];
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 100; i++) {
             array.push(randomIntFromInterval(10, 570));
         }
         this.setState({array: array});
@@ -100,7 +100,7 @@ export default class SortingAnimation extends React.Component {
                     setTimeout(() => {
                         style1.backgroundColor = j % 2 === 1 ? 'greenyellow' : 'pink';
                         style2.backgroundColor = j % 2 === 1 ? 'cyan' : 'pink';
-                        if (j % 2 === 0) {
+                        if (j % 2 === 0 && height1 !== -1) {
                             style1.height = `${height2}px`;
                             style2.height = `${height1}px`;
                         }
@@ -152,6 +152,25 @@ export default class SortingAnimation extends React.Component {
         }
     }
 
+    selectionSort() {
+        const animations = sortingAlgorithms.selectionSort(this.state.array);
+        for (let i = 0; i < animations.length; i++) {
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isCompare = i % 2 === 0;
+            const [idx1, idx2, height1, height2] = animations[i];
+            const style1 = arrayBars[idx1].style;
+            const style2 = arrayBars[idx2].style;
+            setTimeout(() => {
+                style1.backgroundColor = isCompare ? 'red' : 'pink';
+                style2.backgroundColor = isCompare ? 'cyan' : 'pink';
+                if (!isCompare && height1 !== -1) {
+                    style1.height = `${height2}px`;
+                    style2.height = `${height1}px`;
+                }
+            }, i * ANIMATION_SPEED);
+        }
+    }
+
     render() {
         const {array} = this.state;
 
@@ -159,11 +178,21 @@ export default class SortingAnimation extends React.Component {
             <>
             <div className="control-container">
                 <p>Sorting Animation</p>
+                {/* <div className="custom-select">
+                    <select>
+                        <option value="0">Select Algorithm</option>
+                        <option value="1">Merge Sort</option>
+                        <option value="2">Quick Sort</option>
+                        <option value="3">Heap Sort</option>
+                        <option value="4">Bubble Sort</option>
+                    </select>
+                </div> */}
                 <button onClick={() => this.resetArray()}> New Array </button>
                 <button onClick={() => this.mergeSort()}> Merge Sort </button>
                 <button onClick={() => this.quickSort()}> Quick Sort </button>
                 <button onClick={() => this.heapSort()}> Heap Sort </button>
                 <button onClick={() => this.bubbleSort()}> Bubble Sort </button>
+                <button onClick={() => this.selectionSort()}> Selection Sort</button>
                 {/* <button onClick={() => this.testSort()}> Test Sort </button> */}
             </div>
             <div className="array-container">
