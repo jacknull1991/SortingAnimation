@@ -54,6 +54,30 @@
     background: turquoise;
 }
 
+.control-container .slider {
+    margin-left: 50px;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 150px;
+    height: 12px;
+    background: white;
+    outline: none;
+    opacity: 1.0;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 5px;
+}
+
+.control-container .slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: turquoise;
+    border-radius: 50%;
+    cursor: pointer; 
+}
+
 .custom-footer {
     display: flex;
     position: fixed;

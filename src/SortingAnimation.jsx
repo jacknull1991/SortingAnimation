@@ -3,7 +3,10 @@ import * as sortingAlgorithms from './sortingAlgorithms/sortingAlgorithms'
 import './SortingAnimation.css';
 
 // animation speed in ms
-const ANIMATION_SPEED = 5;
+const ANIMATION_SPEED = 10;
+
+// max bar height
+const MAX_BAR_HEIGHT = 1000;
 
 export default class SortingAnimation extends React.Component {
     constructor(props) {
@@ -11,6 +14,7 @@ export default class SortingAnimation extends React.Component {
 
         this.state = {
             array: [],
+            size: 100,
         };
     }
 
@@ -22,10 +26,21 @@ export default class SortingAnimation extends React.Component {
     // randomly generate new array
     resetArray() {
         const array = [];
-        for (let i = 0; i < 100; i++) {
-            array.push(randomIntFromInterval(10, 570));
+        const size = this.state.size;
+        const max_height = Math.min(MAX_BAR_HEIGHT, document.getElementsByClassName('array-container')[0].clientHeight - 10);
+        for (let i = 0; i < size; i++) {
+            array.push(randomIntFromInterval(10, max_height));
         }
-        this.setState({array: array});
+        this.setState({array: array, size: size});
+    }
+
+    // change array range
+    changeArray(event) {
+        let size = event.target.value;
+        console.log(size)
+        const array = this.state.array;
+        this.setState({array: array, size: size}, () => this.resetArray());
+        // this.resetArray();
     }
 
     // test sorting algorithm for 100 iterations
@@ -116,8 +131,8 @@ export default class SortingAnimation extends React.Component {
         const animations = sortingAlgorithms.heapSort(this.state.array);
         for (let i = 0; i < animations.length; i++) {
             const arrayBars = document.getElementsByClassName('array-bar');
-            const isCompare = i % 2 === 0;
             const [idx1, idx2, height1, height2] = animations[i];
+            const isCompare = height1 === -1 ? 1 : 0;
             const style1 = arrayBars[idx1].style;
             const style2 = arrayBars[idx2].style;
             setTimeout(() => {
@@ -171,6 +186,25 @@ export default class SortingAnimation extends React.Component {
         }
     }
 
+    cocktailSort() {
+        const animations = sortingAlgorithms.cocktailSort(this.state.array);
+        for (let i = 0; i < animations.length; i++) {
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isCompare = i % 2 === 0;
+            const [idx1, idx2, height1, height2] = animations[i];
+            const style1 = arrayBars[idx1].style;
+            const style2 = arrayBars[idx2].style;
+            setTimeout(() => {
+                style1.backgroundColor = isCompare ? 'greenyellow' : 'pink';
+                style2.backgroundColor = isCompare ? 'cyan' : 'pink';
+                if (!isCompare && height1 !== -1) {
+                    style1.height = `${height2}px`;
+                    style2.height = `${height1}px`;
+                }
+            }, i * ANIMATION_SPEED);
+        }
+    }
+
     render() {
         const {array} = this.state;
 
@@ -193,7 +227,10 @@ export default class SortingAnimation extends React.Component {
                 <button onClick={() => this.heapSort()}> Heap Sort </button>
                 <button onClick={() => this.bubbleSort()}> Bubble Sort </button>
                 <button onClick={() => this.selectionSort()}> Selection Sort</button>
-                {/* <button onClick={() => this.testSort()}> Test Sort </button> */}
+                <button onClick={() => this.cocktailSort()}> Cocktail Sort</button>
+                <button onClick={() => this.testSort()}> Test Sort </button>
+
+                <input type="range" min="10" max="200" className="slider" defaultValue="100" onChange={(e) => this.changeArray(e)}></input>
             </div>
             <div className="array-container">
                 {array.map((value, index) => (

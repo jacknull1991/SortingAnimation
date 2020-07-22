@@ -115,7 +115,7 @@ function heapSortHelper(array, animations) {
     let end = len - 1;
     while (end > 0) {
         // first for visualizing comparison 
-        animations.push([end, 0, array[end], array[0]]);
+        animations.push([end, 0, -1, -1]);
         // second for visualizing swapping
         animations.push([end, 0, array[end], array[0]]);
         arraySwap(array, end, 0);
@@ -129,7 +129,7 @@ function heapSortHelper(array, animations) {
 // rightChild(i) = i*2 + 2
 function heapify(array, animations) {
     let len = array.length;
-    let start = len / 2 - 1;
+    let start = Math.floor(len / 2 - 1); // crucial using floor function
 
     while (start >= 0) {
         // swap down the node at start s.t. all nodes below the start index are in heap order
@@ -156,7 +156,7 @@ function swapDown(array, start, end, animations) {
         if (swap === root) {
             return; // no swap needed
         } else {
-            animations.push([root, swap, array[root], array[swap]]);
+            animations.push([root, swap, -1, -1]);
             animations.push([root, swap, array[root], array[swap]]);
             arraySwap(array, root, swap, animations);
             root = swap;
@@ -217,6 +217,46 @@ function selectionSortHelper(array, start, animations) {
     animations.push([min_idx, start, array[min_idx], array[start]]);
     arraySwap(array, start, min_idx);
     selectionSortHelper(array, start + 1, animations);
+}
+
+//============ cocktail Sort ======================
+export const cocktailSort = array => {
+    const animations = [];
+    if (array.length <= 1) return animations;
+    cocktailSortHelper(array, 0, array.length - 1, animations);
+    return animations;
+}
+
+function cocktailSortHelper(array, start, end, animations) {
+    if (start >= end) return;
+    let swapped = false;
+    // forward
+    for (let i = start + 1; i <= end; i++) {
+        animations.push([i - 1, i, array[i-1], array[i]]);
+        if (array[i - 1] > array[i]) {
+            animations.push([i - 1, i, array[i-1], array[i]]);
+            arraySwap(array, i - 1, i);
+            swapped = true;
+        } else {
+            animations.push([i - 1, i, -1, -1]);
+        }
+    }
+
+    // backward
+    for (let i = end - 2; i >= start; i--) {
+        animations.push([i, i + 1, array[i], array[i + 1]]);
+        if (array[i] > array[i + 1]) {
+            animations.push([i, i + 1, array[i], array[i + 1]]);
+            arraySwap(array, i, i + 1);
+            swapped = true;
+        } else {
+            animations.push([i, i + 1, -1, -1]);
+        }
+    }
+
+    if (swapped) {
+        cocktailSortHelper(array, start + 1, end - 1, animations);
+    }
 }
 
 //==============Common Helper Functions============
